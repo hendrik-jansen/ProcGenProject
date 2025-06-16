@@ -1,0 +1,49 @@
+    liblzma-dev libglib2.0-0 libsm6 libxrender1 libxext6 libegl1 \
+    libglx0 mesa-utils libglvnd0 libopengl0
+
+    # Install Miniconda
+    wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
+    bash /tmp/miniconda.sh -b -p /opt/conda
+    rm /tmp/miniconda.sh
+
+    export PATH="/opt/conda/bin:$PATH"
+
+    conda update -n base -c defaults conda -y
+    conda config --set always_yes yes --set changeps1 no
+    conda init bash
+
+    # Create conda environment
+    conda create -n project-env python=3.8
+
+    # Activate and install packages
+    /bin/bash -c "
+    source /opt/conda/etc/profile.d/conda.sh
+    conda activate project-env
+
+    echo "###############################conda install###############################################"
+
+    conda install -c conda-forge cloudpickle gym=0.15.7 gym-minigrid=1.0.1 networkx numpy pandas \
+        matplotlib seaborn tensorflow pip lempel_ziv_complexity tqdm gin-config cma box2d-py \
+        geopandas pyvirtualdisplay scikit-learn torchvision treelib pyglet torch
+
+    echo "############################################################################################"
+    conda list tensorflow
+    conda list torch
+    echo "############################################################################################"
+
+    git clone -b tf2 https://github.com/openai/baselines.git
+    cd baselines
+    pip install -e .
+    "
+
+    # Cleanup
+    conda clean -a -y
+
+%environment
+    export PATH="/opt/conda/envs/project-env/bin:$PATH"
+    export CONDA_DEFAULT_ENV=project-env
+
+%runscript
+    source /opt/conda/etc/profile.d/conda.sh
+    conda activate project-env
+    exec "$@"
