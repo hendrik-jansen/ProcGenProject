@@ -1,0 +1,52 @@
+bootstrap: docker
+from: ubuntu:24.04
+
+%post
+    set -e
+    export DEBIAN_FRONTEND=noninteractive
+
+    echo "deb http://archive.ubuntu.com/ubuntu noble universe" >> /etc/apt/sources.list
+    apt-get update
+
+    apt-get install -y python3-dev python3-pip python3-full git make build-essential xvfb \
+    libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+    libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev \
+    python3-openssl git libglib2.0-0 libsm6 libxrender1 libxext6 libegl1 \
+    libglx0 mesa-utils libglvnd0 libopengl0
+
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
+    
+    # Install pyenv-virtualenv plugin
+    git clone https://github.com/pyenv/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
+
+    /bin/bash -c "
+
+    export PYENV_ROOT='$HOME/.pyenv'
+    export PATH='$PYENV_ROOT/bin:$PATH'
+
+    pyenv init -
+    pyenv virtualenv-init -
+
+    pyenv install 3.8
+
+    pyenv global 3.8
+
+    python3 -m venv /opt/project-env
+    source /opt/project-env/bin/activate
+
+    pip install cloudpickle gym==0.15.7 gym-minigrid==1.0.1 networkx numpy pandas torch matplotlib seaborn \
+        tensorflow lempel_ziv_complexity tqdm gin-config cma Box2D geopandas pyvirtualdisplay \
+        scikit-learn torchvision treelib pyglet
+    
+    bash"
+
+    # cleanup
+    apt-get clean
+    pip cache purge
+
+
+%runscript
+    . /opt/project-env/bin/activate
+    "$@"
