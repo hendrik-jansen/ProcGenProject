@@ -20,15 +20,15 @@ from: ubuntu:24.04
     git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
     
     # Install pyenv-virtualenv plugin
-    git clone https://github.com/pyenv/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
+    # git clone https://github.com/pyenv/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
 
-    /bin/bash -c "
+    bash -c "
 
     export PYENV_ROOT='$HOME/.pyenv'
     export PATH='$PYENV_ROOT/bin:$PATH'
 
     pyenv init -
-    pyenv virtualenv-init -
+    # pyenv virtualenv-init -
 
     pyenv install 3.8
 
@@ -37,15 +37,19 @@ from: ubuntu:24.04
     python3 -m venv /opt/project-env
     source /opt/project-env/bin/activate
 
-    pip install cloudpickle gym==0.15.7 gym-minigrid==1.0.1 networkx numpy pandas torch matplotlib seaborn \
-        tensorflow lempel_ziv_complexity tqdm gin-config cma Box2D geopandas pyvirtualdisplay \
-        scikit-learn torchvision treelib pyglet
-    
+    pip install tensorflow
+
     git clone -b tf2 https://github.com/openai/baselines.git
     cd baselines
+
     pip install -e .
+
+    # pip install cloudpickle gym==0.15.7 gym-minigrid==1.0.1 networkx numpy pandas torch matplotlib seaborn \
+    #     tensorflow>=2.0 lempel_ziv_complexity tqdm gin-config cma Box2D geopandas pyvirtualdisplay \
+    #     scikit-learn torchvision treelib pyglet
     
-    bash"
+    
+    "
 
     # cleanup
     apt-get clean
