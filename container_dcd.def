@@ -20,9 +20,12 @@ From: ubuntu:20.04
     ln -s /usr/bin/python3.8 /usr/local/bin/python
     ln -s /usr/bin/pip3 /usr/local/bin/pip
 
-    pip install cloudpickle==1.2.0 gym==0.13.1 gym-minigrid==1.0.1 networkx numpy pandas torch matplotlib seaborn \
-        tensorflow lempel_ziv_complexity tqdm gin-config cma Box2D geopandas pyvirtualdisplay \
-        scikit-learn torchvision treelib pyglet
+    pip install cloudpickle==1.2.0 \
+        gym==0.13.1 gym-minigrid==1.0.1 \
+        networkx numpy==1.24.3 pandas torch matplotlib seaborn \
+        tensorflow lempel_ziv_complexity tqdm gin-config cma Box2D \
+        geopandas pyvirtualdisplay \
+        scikit-learn torchvision treelib pyglet==1.3.2
 
     bash -c "
     git clone -b tf2 https://github.com/openai/baselines.git
