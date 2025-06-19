@@ -13,7 +13,8 @@ From: ubuntu:20.04
         git \
         python3.8 \
         python3.8-dev \
-        python3-pip
+        python3-pip \
+        xvfb
 
     # symlink python3.8 to `python` and `pip`
     ln -s /usr/bin/python3.8 /usr/local/bin/python
