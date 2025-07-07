@@ -1,0 +1,43 @@
+Bootstrap: docker
+From: python:3.10-slim
+
+%labels
+    Author FelixSchlechte
+    Description ML-Container mit kompatibler NumPy-Version
+
+%post
+    apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        git \
+        curl \
+        libaio-dev \
+        && rm -rf /var/lib/apt/lists/*
+
+    # Upgrade pip + setuptools
+    pip install --upgrade pip setuptools wheel
+
+    # Fix: NumPy < 2 wegen Deepspeed-Kompatibilität
+    pip install numpy==1.26.4
+
+    # Optional: Falls du andere native Abhängigkeiten brauchst, hier einfügen
+
+    # Installiere Python-Pakete
+    pip install \
+        torch==2.0.1 \
+        tokenizers==0.14.0 \
+        transformers==4.35.0 \
+        accelerate==0.24.1 \
+        attrdict \
+        tqdm \
+        deepspeed==0.12.2 \
+        datasets \
+        tensorboardX
+
+%environment
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+    export PYTHONUNBUFFERED=1
+
+%runscript
+    echo "Nutze 'singularity exec' oder 'singularity shell', um mit dem Container zu arbeiten."
+

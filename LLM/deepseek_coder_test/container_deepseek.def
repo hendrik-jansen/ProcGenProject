@@ -1,0 +1,41 @@
+Bootstrap: docker
+From: python:3.10-slim
+
+%post
+    # System aktualisieren und grundlegende Tools installieren
+    apt-get update && apt-get install -y \
+        build-essential \
+        git \
+        curl \
+        wget \
+        && apt-get clean
+
+    # Sicherstellen, dass pip aktuell ist
+    pip3 install --upgrade pip
+
+    # Gewünschte Python-Pakete installieren
+    pip3 install \
+        "torch>=2.0" \
+        "tokenizers>=0.14.0" \
+        "transformers==4.35.0" \
+        accelerate \
+        "sympy==1.12" \
+        pebble \
+        timeout-decorator \
+        attrdict
+
+    pip3 install --upgrade huggingface_hub
+
+%environment
+    # Umgebungsvariablen setzen
+    export PATH=/usr/local/bin:$PATH
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+
+%labels
+    Author FelixSchlechte
+    Version 1.0
+
+%runscript
+    echo "Singularity-Container gestartet. Starte Python..."
+    exec python3 "$@"
